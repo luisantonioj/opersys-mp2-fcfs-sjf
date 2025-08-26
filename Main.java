@@ -85,7 +85,20 @@ public class Main {
         }
 
         // Step 5: Choose algorithm
-        Scheduler scheduler = new FCFS(); // Later, can swap with SJF, RR, etc.
+        Scheduler scheduler = null;
+        while (scheduler == null) {
+            System.out.print("\nSelect the CPU scheduling algorithm (1-FCFS, 2-SJF): ");
+            String choice = sc.next();
+
+            if (choice.equals("1")) {
+                scheduler = new FCFS();
+            } else if (choice.equals("2")) {
+                scheduler = new SJF();
+            } else {
+                System.out.println("Invalid choice. Please enter 1 or 2.");
+            }
+        }
+
         scheduler.schedule(processes);
 
         // Step 6: Display Process Table
