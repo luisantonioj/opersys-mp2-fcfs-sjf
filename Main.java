@@ -4,8 +4,9 @@ import java.util.Set;
 
 class Process {
     String processID;
-    int waitingTime;
+    int arrivalTime;
     int burstTime;
+    int waitingTime;
     int turnaroundTime;
 
     Process(String pid) {
@@ -54,7 +55,7 @@ public class Main {
 
                 if (pid.isEmpty()) {
                     System.out.println("Invalid input. Process ID cannot be empty.");
-                } else if (usedProcessIDs.contains(pid)){
+                } else if (usedProcessIDs.contains(pid)) {
                     System.out.println("Invalid input. Process ID must be unique.");
                 } else {
                     processes[i] = new Process(pid);
@@ -64,27 +65,27 @@ public class Main {
             }
         }
 
-        // Step 3: Input Waiting Times
-        java.util.Set<Integer> usedWaitingTimes = new java.util.HashSet<>();
+        // Step 3: Input Arrival Times
+        Set<Integer> usedArrivalTimes = new HashSet<>();
         for (int i = 0; i < n; i++) {
             while (true) {
-                System.out.print("Enter waiting time for " + processes[i].processID + ": ");
+                System.out.print("Enter arrival time for " + processes[i].processID + ": ");
 
                 if (sc.hasNextInt()) {
-                    int wt = sc.nextInt();
+                    int at = sc.nextInt();
 
-                    if (wt < 0) {
-                        System.out.println("Invalid input. Waiting time must be 0 or greater.");
-                    } else if (usedWaitingTimes.contains(wt)) {
-                        System.out.println("Invalid input. Waiting time must not be repeated.");
+                    if (at < 0) {
+                        System.out.println("Invalid input. Arrival time must be 0 or greater.");
+                    } else if (usedArrivalTimes.contains(at)) {
+                        System.out.println("Invalid input. Arrival time must not be repeated.");
                     } else {
-                        processes[i].waitingTime = wt;
-                        usedWaitingTimes.add(wt);
-                        break; // ✅ valid input, exit loop
+                        processes[i].arrivalTime = at;
+                        usedArrivalTimes.add(at);
+                        break;
                     }
                 } else {
                     System.out.println("Invalid input. Please enter a valid integer.");
-                    sc.next(); // discard invalid token
+                    sc.next();
                 }
             }
         }
@@ -110,22 +111,34 @@ public class Main {
             }
         }
 
-        // Step 5: Compute Turnaround Times
+        // Step 5: Compute Scheduling (FCFS)
         int totalWT = 0, totalTAT = 0;
+        int currentTime = 0;
+
+        // sort by arrival time (FCFS)
+        java.util.Arrays.sort(processes, (a, b) -> a.arrivalTime - b.arrivalTime);
+
         for (int i = 0; i < n; i++) {
-            processes[i].turnaroundTime = processes[i].waitingTime + processes[i].burstTime;
+            int startTime = Math.max(currentTime, processes[i].arrivalTime);
+            int completionTime = startTime + processes[i].burstTime;
+
+            processes[i].turnaroundTime = completionTime - processes[i].arrivalTime;
+            processes[i].waitingTime = processes[i].turnaroundTime - processes[i].burstTime;
+
             totalWT += processes[i].waitingTime;
             totalTAT += processes[i].turnaroundTime;
+
+            currentTime = completionTime;
         }
 
         // Step 6: Display Process Table
-        System.out.println("\nProcess\tWaiting Time\tBurst Time\tTurnaround Time");
+        System.out.println("\nProcess\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time");
         for (Process p : processes) {
-            System.out.println(p.processID + "\t" + p.waitingTime + "\t\t" + p.burstTime + "\t\t" + p.turnaroundTime);
+            System.out.println(p.processID + "\t" + p.arrivalTime + "\t\t" + p.burstTime + "\t\t" + p.waitingTime + "\t\t" + p.turnaroundTime);
         }
 
         // Step 7: Display Averages
-        System.out.println("\nAverage waiting: " + (float) totalWT / n);
+        System.out.println("\nAverage waiting time: " + (float) totalWT / n);
         System.out.println("Average turn-around time: " + (float) totalTAT / n);
 
         sc.close();
