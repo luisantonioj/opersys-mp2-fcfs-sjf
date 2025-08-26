@@ -1,18 +1,4 @@
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-
-class Process {
-    String processID;
-    int arrivalTime;
-    int burstTime;
-    int waitingTime;
-    int turnaroundTime;
-
-    Process(String pid) {
-        processID = pid;
-    }
-}
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,13 +10,7 @@ public class Main {
             System.out.print("Enter the no. of process (3-10): ");
             String input = sc.next();
 
-            boolean isNumeric = true;
-            for (char c : input.toCharArray()) {
-                if (!Character.isDigit(c)) {
-                    isNumeric = false;
-                    break;
-                }
-            }
+            boolean isNumeric = input.chars().allMatch(Character::isDigit);
 
             if (isNumeric) {
                 n = Integer.parseInt(input);
@@ -50,7 +30,7 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             while (true) {
-                System.out.print("Enter process ID for Process" + (i + 1) + ": ");
+                System.out.print("Enter process ID for Process " + (i + 1) + ": ");
                 String pid = sc.next().trim();
 
                 if (pid.isEmpty()) {
@@ -66,19 +46,16 @@ public class Main {
         }
 
         // Step 3: Input Arrival Times
-        Set<Integer> usedArrivalTimes = new HashSet<>();
         for (int i = 0; i < n; i++) {
             while (true) {
                 System.out.print("Enter arrival time for " + processes[i].processID + ": ");
 
                 if (sc.hasNextInt()) {
                     int at = sc.nextInt();
-
                     if (at < 0) {
                         System.out.println("Invalid input. Arrival time must be 0 or greater.");
                     } else {
                         processes[i].arrivalTime = at;
-                        usedArrivalTimes.add(at);
                         break;
                     }
                 } else {
@@ -92,10 +69,8 @@ public class Main {
         for (int i = 0; i < n; i++) {
             while (true) {
                 System.out.print("Enter burst time for " + processes[i].processID + ": ");
-
                 if (sc.hasNextInt()) {
                     int bt = sc.nextInt();
-
                     if (bt <= 0) {
                         System.out.println("Invalid input. Burst time must be a positive integer.");
                     } else {
@@ -109,30 +84,20 @@ public class Main {
             }
         }
 
-        // Step 5: Compute Scheduling (FCFS)
-        int totalWT = 0, totalTAT = 0;
-        int currentTime = 0;
-
-        // sort by arrival time (FCFS)
-        java.util.Arrays.sort(processes, (a, b) -> a.arrivalTime - b.arrivalTime);
-
-        for (int i = 0; i < n; i++) {
-            int startTime = Math.max(currentTime, processes[i].arrivalTime);
-            int completionTime = startTime + processes[i].burstTime;
-
-            processes[i].turnaroundTime = completionTime - processes[i].arrivalTime;
-            processes[i].waitingTime = processes[i].turnaroundTime - processes[i].burstTime;
-
-            totalWT += processes[i].waitingTime;
-            totalTAT += processes[i].turnaroundTime;
-
-            currentTime = completionTime;
-        }
+        // Step 5: Choose algorithm
+        Scheduler scheduler = new FCFS(); // Later, can swap with SJF, RR, etc.
+        scheduler.schedule(processes);
 
         // Step 6: Display Process Table
+        int totalWT = 0, totalTAT = 0;
         System.out.println("\nProcess\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time");
         for (Process p : processes) {
-            System.out.println(p.processID + "\t" + p.arrivalTime + "\t\t" + p.burstTime + "\t\t" + p.waitingTime + "\t\t" + p.turnaroundTime);
+            System.out.println(p.processID + "\t" + p.arrivalTime + "\t\t" +
+                    p.burstTime + "\t\t" +
+                    p.waitingTime + "\t\t" +
+                    p.turnaroundTime);
+            totalWT += p.waitingTime;
+            totalTAT += p.turnaroundTime;
         }
 
         // Step 7: Display Averages
