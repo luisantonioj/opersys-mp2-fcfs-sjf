@@ -76,8 +76,6 @@ public class Main {
 
                     if (at < 0) {
                         System.out.println("Invalid input. Arrival time must be 0 or greater.");
-                    } else if (usedArrivalTimes.contains(at)) {
-                        System.out.println("Invalid input. Arrival time must not be repeated.");
                     } else {
                         processes[i].arrivalTime = at;
                         usedArrivalTimes.add(at);
