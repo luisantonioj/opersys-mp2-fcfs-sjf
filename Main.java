@@ -5,6 +5,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         boolean newSet = true; // controls whether to input new processes
+        System.out.println("CPU Scheduling\n");
         while (newSet) {
             // Step 1: Input number of processes
             int n = 0;
