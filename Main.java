@@ -151,6 +151,7 @@ public class Main {
         }
 
         System.out.println("\nProgram terminated.");
+        System.out.println("Made by Luis Antonio M. Jopia of C3A");
         sc.close();
     }
 }
