@@ -135,8 +135,8 @@ public class Main {
                 }
 
                 // Step 7: Display Averages
-                System.out.println("\nAverage waiting time: " + (float) totalWT / n + " ms\n");
-                System.out.println("Average turn-around time: " + (float) totalTAT / n + " ms\n");
+                System.out.println("\nAverage waiting time: " + (float) totalWT / n + " ms \n");
+                System.out.println("Average turn-around time: " + (float) totalTAT / n + " ms \n");
 
                 // Ask if user wants another algorithm
                 System.out.print("\nDo you want to try another algorithm with the same set? (y/n): ");
@@ -151,6 +151,7 @@ public class Main {
         }
 
         System.out.println("\nProgram terminated.");
+        System.out.println("Made by Luis Antonio M. Jopia of C3A");
         sc.close();
     }
 }
