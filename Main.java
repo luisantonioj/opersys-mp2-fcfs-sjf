@@ -135,8 +135,8 @@ public class Main {
                 }
 
                 // Step 7: Display Averages
-                System.out.println("\nAverage waiting time: %.1f" + (float) totalWT / n + " ms \n");
-                System.out.println("Average turn-around time: %.1f" + (float) totalTAT / n + " ms \n");
+                System.out.printf("\nAverage waiting time: %.1f ms \n", (float) totalWT / n);
+                System.out.printf("Average turn-around time: %.1f ms \n", (float) totalTAT / n);
 
                 // Ask if user wants another algorithm
                 System.out.print("\nDo you want to try another algorithm with the same set? (y/n): ");
