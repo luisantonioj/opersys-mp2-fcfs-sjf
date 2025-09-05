@@ -51,6 +51,7 @@ public class Main {
             }
 
             // Step 3: Input Arrival Times
+            Set<Integer> usedArrivalTimes = new HashSet<>();
             for (int i = 0; i < n; i++) {
                 boolean validAT = false;
                 while (!validAT) {
@@ -60,8 +61,11 @@ public class Main {
                         int at = sc.nextInt();
                         if (at < 0) {
                             System.out.println("Invalid input. Arrival time must be 0 or greater.");
+                        } else if (usedArrivalTimes.contains(at)) {
+                            System.out.println("Invalid input. Arrival time must not be repeated.");
                         } else {
                             processes[i].arrivalTime = at;
+                            usedArrivalTimes.add(at);
                             validAT = true;
                         }
                     } else {
