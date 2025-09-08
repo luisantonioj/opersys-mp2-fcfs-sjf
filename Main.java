@@ -61,7 +61,7 @@ public class Main {
                         int at = sc.nextInt();
                         if (at < 0) {
                             System.out.println("Invalid input. Arrival time must be 0 or greater.");
-                        } else if (usedArrivalTimes.contains(at)) {
+                        } else  if (usedArrivalTimes.contains(at)) {
                             System.out.println("Invalid input. Arrival time must not be repeated.");
                         } else {
                             processes[i].arrivalTime = at;
@@ -127,11 +127,14 @@ public class Main {
                 scheduler.schedule(clonedProcesses);
 
                 // Step 6: Display Process Table
+                Process[] displayProcesses = Arrays.copyOf(clonedProcesses, n);
+                Arrays.sort(displayProcesses, (a, b) -> a.processID.compareTo(b.processID));
+
                 int totalWT = 0, totalTAT = 0;
                 System.out.printf("\n%-10s %-15s %-15s %-15s %-15s\n",
                         "Process", "Arrival Time", "Burst Time", "Waiting Time", "Turnaround Time");
 
-                for (Process p : clonedProcesses) {
+                for (Process p : displayProcesses) {
                     System.out.printf("%-10s %-15d %-15d %-15d %-15d\n",
                             p.processID, p.arrivalTime, p.burstTime, p.waitingTime, p.turnaroundTime);
                     totalWT += p.waitingTime;
